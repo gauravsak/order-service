@@ -43,9 +43,18 @@ public class OrderServiceTest {
      */
     @Pact(provider = "user_service", consumer = "order_service")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
-        // TODO - Implement user service mock expectation required for OrderService.
-        // TODO - This will get translated into the contract between order service and user service.
-        return null;
+        return builder.given("User Paresh exists")
+                .uponReceiving("Get User request")
+                .path("/user/" + USER_ID)
+                .method("GET")
+                .willRespondWith()
+                .status(200)
+                .body(newJsonBody(x -> {
+                    x.stringValue("name", "Paresh");
+                    x.stringValue("email", "paresh@gmail.com");
+                    x.stringValue("address", "Pune");
+                }).build())
+                .toPact();
     }
 
 
